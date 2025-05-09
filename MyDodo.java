@@ -152,6 +152,7 @@ public class MyDodo extends Dodo
         turnRight();
         turnRight();
     }
+    
     public boolean grainAhead(){
         move();
         boolean isGrain = onGrain();
@@ -160,4 +161,33 @@ public class MyDodo extends Dodo
         turn180();
         return isGrain;
     }
-}
+    
+    public void goToEgg(){
+        boolean eggFound = false;
+        while (!eggFound) {
+        if(onEgg()) {
+            eggFound = true;
+            break;
+        }else{
+            move();
+        }
+        }
+    }
+    
+    public void goBackToStartOfRowAndFaceBack() {
+         turn180();
+         while( ! borderAhead() && canMove()){
+            move();
+        }
+        turn180();
+    }
+    
+    public void walkToWorldEdgeClimbingOverFences() {
+        while( ! borderAhead()){
+            move();
+            if (fenceAhead()){
+                climbOverFence();
+            }
+        }
+    }
+}   
