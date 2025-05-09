@@ -120,7 +120,7 @@ public class MyDodo extends Dodo
         for (int i = 0; i < 20; i++) {
             System.out.println();
         }
-        while( ! borderAhead()){
+        while( ! borderAhead() && canMove()){
             System.out.println("X: " + getX() + " Y: " + getY());
             move();
         }
