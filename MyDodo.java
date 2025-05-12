@@ -64,6 +64,30 @@ public class MyDodo extends Dodo
         }
     }
     
+        public void climbOverMultipleFences() {
+        boolean voltooid = false;
+        if (fenceAhead()){
+            turnLeft();
+            move();
+            turnRight();
+            move();
+            move();
+            turnRight();
+            while(!voltooid){
+            if (fenceAhead()){
+                turnLeft();
+                move();
+                turnRight();
+                }
+            else{
+                voltooid = true;
+            }
+            }
+            move();
+            turnLeft();
+        }
+    }
+    
     /**
      * Hatches the egg in the current cell by removing
      * the egg from the cell.
@@ -156,9 +180,7 @@ public class MyDodo extends Dodo
     public boolean grainAhead(){
         move();
         boolean isGrain = onGrain();
-        turn180();
-        move();
-        turn180();
+        stepOneCellBackwards();
         return isGrain;
     }
     
@@ -184,9 +206,46 @@ public class MyDodo extends Dodo
     
     public void walkToWorldEdgeClimbingOverFences() {
         while( ! borderAhead()){
-            move();
             if (fenceAhead()){
-                climbOverFence();
+                climbOverMultipleFences();
+            }
+            else{
+            move();
+            }
+        }
+    }
+    
+    public void pickUpGrainsAndPrintCoordinates() {
+        for (int i = 0; i < 20; i++) {
+            System.out.println();
+        }
+        while(! borderAhead()){
+            if (onGrain()){
+                pickUpGrain();
+                System.out.println("X: " + getX() + " Y: " + getY());
+            }
+            move();
+            if (onGrain()){
+                pickUpGrain();
+                System.out.println("X: " + getX() + " Y: " + getY());
+            }
+        }
+    }
+    
+    public void stepOneCellBackwards() {
+        turn180();
+        move();
+        turn180();
+    }
+    
+    public void walkToWorldEdgeFillingEmptyNests() {
+        while(! borderAhead()){
+            if (onNest() && !onEgg()){
+                layEgg();
+            }
+            move();
+            if (onNest() && !onEgg()){
+                layEgg();
             }
         }
     }
