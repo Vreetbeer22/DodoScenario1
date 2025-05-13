@@ -206,6 +206,9 @@ public class MyDodo extends Dodo
     
     public void walkToWorldEdgeClimbingOverFences() {
         while( ! borderAhead()){
+            if (onNest()){
+                break;
+            }
             if (fenceAhead()){
                 climbOverMultipleFences();
             }
@@ -246,6 +249,25 @@ public class MyDodo extends Dodo
             move();
             if (onNest() && !onEgg()){
                 layEgg();
+            }
+        }
+    }
+    
+    public void walkAroundFencedArea() {
+        while ( ! onEgg()){
+            turnRight();
+            if(fenceAhead()){
+                turnLeft();
+                if(fenceAhead()){
+                    turnLeft();
+                }
+                if(fenceAhead()){
+                    turnLeft();
+                }
+                move();
+            }
+            else {
+                move();
             }
         }
     }
