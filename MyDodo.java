@@ -319,4 +319,124 @@ public class MyDodo extends Dodo
             }
         }
     }
+    
+    public boolean fenceOnRightSide() {
+        turnRight();
+        boolean result = fenceAhead();
+        turnLeft();
+        return result;
+    }
+    
+    public boolean fenceOnLeftSide() {
+        turnLeft();
+        boolean result = fenceAhead();
+        turnRight();
+        return result;
+    }
+    
+    public void walkInMaze() {
+        while ( ! onNest()){
+            boolean fenceOnRight = fenceOnRightSide();
+            boolean fenceOnLeft = fenceOnLeftSide();
+            if ( !fenceOnRight ){
+                turnRight();
+                move();
+            }
+            else if ( !fenceAhead() ){
+                move();
+            }
+            else if ( !fenceOnLeft){
+                turnLeft();
+                move();
+            }
+            else{
+                turn180();
+            }
+        }
+    }
+       
+    public void faceNorth() {
+        while (getDirection() !=NORTH) {
+            turnRight();
+        }
+    }
+    
+    public void faceEast() {
+        while (getDirection() !=EAST) {
+            turnRight();
+        }
+    }
+    
+    public void faceSouth() {
+        while (getDirection() !=SOUTH) {
+            turnRight();
+        }
+    }
+    
+    public void faceWest() {
+        while (getDirection() !=WEST) {
+            turnRight();
+        }
+    }
+    
+    public boolean validCoordinates(int x,int y) {
+        if (x > getWorld().getWidth()-1 || y > getWorld().getHeight()-1){
+            showError ("Those aren't valid coördinates");
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+    
+    public void goToLocation(int coordx,int coordy) {
+        if (validCoordinates(coordx, coordy)){
+            boolean locationXReached = false;
+            boolean locationYReached = false;
+            while ( !locationXReached ){
+                if (getX() < coordx){
+                    faceEast();
+                    move();
+                }
+                else if (getX() > coordx){
+                    faceWest();
+                    move();
+                }
+                else{
+                    locationXReached = true;
+                }
+            }
+            turnRight();
+            while ( !locationYReached ){
+                if (getY() < coordy){
+                    faceSouth();
+                    move();
+                }
+                else if (getY() > coordy){
+                    faceNorth();
+                    move();
+                }
+                else{
+                    locationYReached = true;
+                }
+            }
+            faceEast();
+        }
+    }
+    
+    public void countEggsInRow(){
+        int numberOffEggs = 0;
+        if (onEgg()){
+            numberOffEggs++;    
+        }
+        move();
+        while( ! borderAhead()){
+            if (onEgg()){
+                numberOffEggs++;    
+            }
+            move();
+        }
+        goBackToStartOfRowAndFaceBack();
+        showCompliment("je hebt "+numberOffEggs+" gevonden in deze rij");
+    }
 }   
