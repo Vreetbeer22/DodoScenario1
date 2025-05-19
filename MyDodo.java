@@ -426,16 +426,15 @@ public class MyDodo extends Dodo
     
     public void countEggsInRow(){
         int numberOffEggs = 0;
-        if (onEgg()){
-            numberOffEggs++;    
-        }
-        move();
         while( ! borderAhead()){
             if (onEgg()){
                 numberOffEggs++;    
             }
             move();
         }
+        if (onEgg()){
+            numberOffEggs++;    
+        }   
         goBackToStartOfRowAndFaceBack();
         showCompliment("je hebt "+numberOffEggs+" gevonden in deze rij");
     }
