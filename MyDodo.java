@@ -438,4 +438,52 @@ public class MyDodo extends Dodo
         goBackToStartOfRowAndFaceBack();
         showCompliment("je hebt "+numberOffEggs+" gevonden in deze rij");
     }
+    
+    public void layInputNumberOffEggs(int numberOfEggs) {
+        int repeat = 0;
+        while (numberOfEggs - 1 != repeat){
+            if(borderAhead()){
+                break;
+            }
+            if (! onEgg()){
+               layEgg(); 
+               move();
+            }
+            else{
+                move();
+            }
+            repeat++;
+        }
+        if (! onEgg()){
+               layEgg(); 
+            }
+    }
+    
+    public void goToRowBelowAndTurnAround() {
+        if(getDirection() == EAST){
+            turnRight();
+            move();
+            turnRight();
+        }
+        else if(getDirection() == WEST){
+            turnLeft();
+            move();
+            turnLeft();
+        }
+    }
+    
+    public void countEggsInWorld() {
+        int eggsInWorld = 0;
+        goToLocation(0,0);
+        while( ! borderAhead()){
+            if (onEgg()){
+                eggsInWorld++;    
+            }
+            move();
+        }
+        if (onEgg()){
+            eggsInWorld++;    
+        }
+        goToRowBelowAndTurnAround();
+    }
 }   
