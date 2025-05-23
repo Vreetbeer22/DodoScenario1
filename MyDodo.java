@@ -474,16 +474,28 @@ public class MyDodo extends Dodo
     
     public void countEggsInWorld() {
         int eggsInWorld = 0;
+        boolean endReached = false;
+        int beginX = getX();
+        int beginY = getY();
         goToLocation(0,0);
-        while( ! borderAhead()){
+        while (!endReached){
+            while( ! borderAhead()){
             if (onEgg()){
                 eggsInWorld++;    
             }
             move();
+            }
+            if (onEgg()){
+                eggsInWorld++;    
+            }
+            if (getY() == getWorld().getHeight() -1){
+                endReached = true;
+            }
+            else {
+                goToRowBelowAndTurnAround();
+            }
         }
-        if (onEgg()){
-            eggsInWorld++;    
-        }
-        goToRowBelowAndTurnAround();
+        goToLocation(beginX, beginY);
+        showCompliment("je hebt "+eggsInWorld+" gevonden in de wereld");
     }
 }   
