@@ -354,7 +354,15 @@ public class MyDodo extends Dodo
             }
         }
     }
-       
+    
+    public void faceDirection(int direction) {
+        if (direction < NORTH || direction > WEST) {
+            return;
+        }
+        while (getDirection() !=direction) {
+            turnRight();
+        }
+    }
     public void faceNorth() {
         while (getDirection() !=NORTH) {
             turnRight();
@@ -498,4 +506,55 @@ public class MyDodo extends Dodo
         goToLocation(beginX, beginY);
         showCompliment("je hebt "+eggsInWorld+" gevonden in de wereld");
     }
+    
+    public void findRowWithMostEggs() {
+        boolean endReached = false;
+        boolean end = false;
+        int mostEggs = 0;
+        int numberOffEggs = 0;
+        int row = 0;
+        int mostInRow = 0;
+        int beginX = getX();
+        int beginY = getY();
+        goToLocation(0,0);
+        while( !endReached){
+            numberOffEggs = 0;
+            row++;
+            while( ! borderAhead()){
+                if (onEgg()){
+                    numberOffEggs++;    
+                }
+                move();
+            }
+            if (onEgg()){
+                numberOffEggs++;    
+            }   
+            goBackToStartOfRowAndFaceBack();
+            if (numberOffEggs > mostEggs){
+                mostEggs = numberOffEggs;
+                mostInRow = row;
+            }
+            if (getY() == getWorld().getHeight() -1){
+                endReached = true;
+            }
+            else {
+            turnRight();
+            move();
+            turnLeft();
+            }
+        }
+        goToLocation(beginX, beginY);
+        showCompliment("Je hebt de meeste eieren in rij "+mostInRow);
+    }
+    
+    public void makeEggMonument(){
+        int row = 0;
+        boolean end = false;
+        faceEast();
+        while (!end){
+            row++;
+            
+        }
+    }
+    
 }   
