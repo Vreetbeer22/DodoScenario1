@@ -547,14 +547,198 @@ public class MyDodo extends Dodo
         showCompliment("Je hebt de meeste eieren in rij "+mostInRow);
     }
     
+    /**
+     * maakt een monument door aan het begin van elke rij de waarde met 1 te verhogen en dan steeds zoveel blokjes in te vullen voordat de dodo terug 
+     * gaat naar zijn orginele positie
+     */
     public void makeEggMonument(){
         int row = 0;
+        int aantal = 0;
         boolean end = false;
         faceEast();
+        if (canLayEgg()){
+        layEgg();
+        }
+        turnRight();
+        move();
+        turnLeft();
         while (!end){
             row++;
-            
+            int beginX = getX();
+            int beginY = getY();
+            while (row >= aantal){
+                if (canLayEgg()){
+                    layEgg();
+                    move();
+                }
+                else{
+                    move();
+                }
+                aantal++;
+            }
+            aantal = 0;
+            goToLocation(beginX, beginY);
+            if (getY() == getWorld().getHeight() -1){
+                end = true;
+            }
+            else {
+            turnRight();
+            move();
+            turnLeft();
+            }
         }
     }
     
-}   
+    /**
+     * maakt een stevig monument aan eieren door elke keer na een rij het aantal te verdubbelen
+     */
+    public void makeEggMonument2(){
+        int row = 1;
+        int aantal = 0;
+        boolean end = false;
+        faceEast();
+        if (canLayEgg()){
+        layEgg();
+        }
+        turnRight();
+        move();
+        turnLeft();
+        while (!end){
+            row = row * 2;
+            int beginX = getX();
+            int beginY = getY();
+            while (row >= aantal){
+                if (canLayEgg()){
+                    layEgg();
+                    move();
+                }
+                else{
+                    move();
+                }
+                aantal++;
+            }
+            aantal = 0;
+            goToLocation(beginX, beginY);
+            if (getY() == getWorld().getHeight() -1){
+                end = true;
+            }
+            else {
+            turnRight();
+            move();
+            turnLeft();
+            }
+        }
+    }
+    
+    /**
+     * maakt een een piramide door voor elke rij de waarde met 1 te verhogen en vervolgens
+     * bijde kanten op aan de hand van de hoeveelheid waarde steeds eieren te leggen
+     */
+    public void makeEggPyramid() {
+        int row = 0;
+        int aantal = 0;
+        boolean end = false;
+        faceEast();
+        if (canLayEgg()){
+        layEgg();
+        }
+        turnRight();
+        move();
+        turnLeft();
+        while (!end){
+            row++;
+            int beginX = getX();
+            int beginY = getY();
+            while (row >= aantal){
+                if (canLayEgg()){
+                    layEgg();
+                    if (canMove()){
+                        move();
+                    }
+                    else{
+                        break;
+                    }
+                }
+                else{
+                    if (canMove()){
+                        move();
+                    }
+                    else{
+                        break;
+                    }
+                }
+                aantal++;
+            }
+            aantal = 0;
+            goToLocation(beginX, beginY);
+            faceWest();
+            while (row >= aantal){
+                if (canLayEgg()){
+                    layEgg();
+                    if (canMove()){
+                        move();
+                    }
+                    else{
+                        break;
+                    }
+                }
+                else{
+                    if (canMove()){
+                        move();
+                    }
+                    else{
+                        break;
+                    }
+                }
+                aantal++;
+            }
+            aantal = 0;
+            goToLocation(beginX, beginY);
+            faceEast();
+            if (getY() == getWorld().getHeight() -1){
+                end = true;
+            }
+            else {
+            turnRight();
+            move();
+            turnLeft();
+            }
+        }
+    }
+    
+    /**
+     * telt het gemiddelde aantal eieren per rij door eerst alles te tellen en dat aantal door het aantal rijen te delen
+     */
+    public void countAverageAmountOfEggsPerRow() {
+        int eggsInWorld = 0;
+        double averageAmountOffEggs = 0;
+        int rowCount = 1;
+        boolean endReached = false;
+        int beginX = getX();
+        int beginY = getY();
+        goToLocation(0,0);
+        while (!endReached){
+            while( ! borderAhead()){
+            if (onEgg()){
+                eggsInWorld++;    
+            }
+            move();
+            }
+            if (onEgg()){
+                eggsInWorld++;    
+            }
+            if (getY() == getWorld().getHeight() -1){
+                endReached = true;
+            }
+            else {
+                goToRowBelowAndTurnAround();
+                rowCount++;
+            }
+        }
+        averageAmountOffEggs = (double) eggsInWorld/rowCount;
+        goToLocation(beginX, beginY);
+        showCompliment("Je hebt gemiddeld "+averageAmountOffEggs+" per rij");
+    }
+    
+    
+}
