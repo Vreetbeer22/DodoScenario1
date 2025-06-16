@@ -432,7 +432,7 @@ public class MyDodo extends Dodo
         }
     }
     
-    public void countEggsInRow(){
+    public int countEggsInRow(){
         int numberOffEggs = 0;
         while( ! borderAhead()){
             if (onEgg()){
@@ -444,7 +444,7 @@ public class MyDodo extends Dodo
             numberOffEggs++;    
         }   
         goBackToStartOfRowAndFaceBack();
-        showCompliment("je hebt "+numberOffEggs+" gevonden in deze rij");
+        return numberOffEggs;
     }
     
     public void layInputNumberOffEggs(int numberOfEggs) {
@@ -740,5 +740,78 @@ public class MyDodo extends Dodo
         showCompliment("Je hebt gemiddeld "+averageAmountOffEggs+" per rij");
     }
     
-    
+    /**
+    * vindt in je wereld de rij en colom met een missend ei. 
+    * hierbij gaat mimi elke rij af totdat er een rij gevonden wordt waar er een oneven aantal eieren ligt.
+    * vervolgens onthoud mimi dit coordinaat en doet hetzelfde voor de colomen.
+    * daarna heb je 2 coordinaten waar er een ei moet komen en gaat mimi daar naartoe en legt een ei.
+    */
+    public void findMissingEggscCell() {
+        int missingX = 0;
+        int missingY = 0;
+        int count = -1;
+        int numberOffEggs;
+        boolean endReached = false;
+        boolean xReached = false;
+        boolean yReached = false;
+        int beginX = getX();
+        int beginY = getY();
+        goToLocation(0,0);
+        while (!endReached){
+            while (!yReached){
+                count++;
+                faceEast();
+                numberOffEggs = countEggsInRow();
+                if (getY() == getWorld().getHeight() -1){
+                    yReached = true;
+                }
+                if ((numberOffEggs % 2) == 0){
+                    turnRight();
+                    if ( canMove() ) {
+                        step();
+                    }
+                    turnLeft();
+                }
+                else{
+                    missingY = count;
+                    goToLocation(0,0);
+                    yReached = true;
+                }
+                numberOffEggs = 0;
+            }
+            count = -1;
+            while (!xReached){
+                count++;
+                faceSouth();
+                numberOffEggs = countEggsInRow();
+                if (getX() == getWorld().getWidth() -1){
+                    xReached = true;
+                }
+                if ((numberOffEggs % 2) == 0){
+                    turnLeft();
+                    if ( canMove() ) {
+                        step();
+                    }
+                    turnRight();
+                }
+                else{
+                    missingX = count;
+                    goToLocation(0,0);
+                    xReached = true;
+                }
+            }
+            goToLocation(missingX,missingY);
+            if (!onEgg() && missingX != 0 && missingY != 0){
+               layEgg(); 
+            }
+            else if(onEgg()){
+                pickUpEgg();
+            }
+            else{
+              showCompliment("Er is niks mis");  
+            }
+            goToLocation(beginX, beginY);
+            endReached = true;
+        }
+    }
 }
