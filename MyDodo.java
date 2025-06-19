@@ -814,4 +814,160 @@ public class MyDodo extends Dodo
             endReached = true;
         }
     }
+    
+    /**
+     * zorgt dat mimi naar 0.0 kan gaan en naar het oosten kijkt
+     * dit gebeurt door dat je mimi eerst een stap neemt een een willekeurige richting
+     * daarna kijkt ze welke kant dat op was aan de hand van coordinaten
+     * en vanuit daar kan ze dan naar 0.0 gaan lopen
+     */
+    public void findStartPosition() {
+        boolean findMoveDirection = false;
+        int startX = getX();
+        int startY = getY();
+        int newX = 0;
+        int newY = 0;
+        while (!findMoveDirection){
+            if (canMove()){
+                move();
+                newX = getX();
+                newY = getY();
+                stepOneCellBackwards();
+                findMoveDirection = true;
+            }
+            else{
+                turnLeft();
+            }
+        }
+        if (newX > startX){
+            turn180();
+            while(canMove()){
+                move();
+            }
+            turnRight();
+            while(canMove()){
+                move();
+            }
+            turnRight();
+        }
+        else if (newX < startX){
+            while(canMove()){
+                move();
+            }
+            turnRight();
+            while(canMove()){
+                move();
+            }
+            turnRight();
+        }
+        else if (newY > startY){
+            turnRight();
+            while(canMove()){
+                move();
+            }
+            turnRight();
+            while(canMove()){
+                move();
+            }
+            turnRight();
+        }
+        else {
+            turnLeft();
+            while(canMove()){
+                move();
+            }
+            turnRight();
+            while(canMove()){
+                move();
+            }
+            turnRight();
+        }
+    }
+    
+    /**
+     * het zelfde als findMissingEggCell maar nu zonder richtingen
+     * gebruikt de bovenstaade functie findStartPosition en turnLeft en turnRight
+     */
+    public void findMissingEggCellWithoutDirection() {
+        int missingX = 0;
+        int missingY = 0;
+        int count = -1;
+        int numberOffEggs;
+        boolean endReached = false;
+        boolean xReached = false;
+        boolean yReached = false;
+        int beginX = getX();
+        int beginY = getY();
+        findStartPosition();
+        while (!endReached){
+            while (!yReached){
+                count++;
+                numberOffEggs = countEggsInRow();
+                if (getY() == getWorld().getHeight() -1){
+                    yReached = true;
+                }
+                if ((numberOffEggs % 2) == 0){
+                    turnRight();
+                    if ( canMove() ) {
+                        step();
+                    }
+                    turnLeft();
+                }
+                else{
+                    missingY = count;
+                    findStartPosition();
+                    yReached = true;
+                }
+                numberOffEggs = 0;
+            }
+            count = -1;
+            turnRight();
+            while (!xReached){
+                count++;
+                numberOffEggs = countEggsInRow();
+                if (getX() == getWorld().getWidth() -1){
+                    xReached = true;
+                }
+                if ((numberOffEggs % 2) == 0){
+                    turnLeft();
+                    if ( canMove() ) {
+                        step();
+                    }
+                    turnRight();
+                }
+                else{
+                    missingX = count;
+                    findStartPosition();
+                    xReached = true;
+                }
+            }
+            findStartPosition();
+            while (missingX > getX()){
+                move();
+            }
+            turnRight();
+            while (missingY > getY()){
+                move();
+            }
+            if (!onEgg() && missingX != 0 && missingY != 0){
+               layEgg(); 
+            }
+            else if(onEgg()){
+                pickUpEgg();
+            }
+            else{
+              showCompliment("Er is niks mis");  
+            }
+            findStartPosition();
+            while (beginX > getX()){
+                move();
+            }
+            turnRight();
+            while (beginY > getY()){
+                move();
+            }
+            turnLeft();
+            endReached = true;
+        }
+    }
 }
