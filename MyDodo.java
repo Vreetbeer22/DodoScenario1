@@ -1,4 +1,7 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
+import java.util.List;
+import java.util.Arrays;
+import java.util.ArrayList;
 
 /**
  *
@@ -969,5 +972,52 @@ public class MyDodo extends Dodo
             turnLeft();
             endReached = true;
         }
+    }
+    
+    /**
+     * Places all the Egg objects in the world in a list.
+     * 
+     * @return List of Egg objects in the world
+     */
+    public List<Egg> getListOfEggsInWorld() {
+        return getWorld().getObjects(Egg.class);
+    }
+    
+    public void practiceWithListsOfSurpriseEggs(){
+        List<SurpriseEgg>  listOfEgss = SurpriseEgg.generateListOfSurpriseEggs( 10, getWorld() );
+    }
+    
+    public List<SurpriseEgg> getListOfSurpriseEggsInWorld() {
+        return getWorld().getObjects(SurpriseEgg.class);
+    }
+    
+    public void findMostValuebleEgg() {
+        int highestValue = 0;
+        int highestX = 0;
+        int highestY = 0;
+        List<SurpriseEgg> listOfEgss= getListOfSurpriseEggsInWorld();
+        for (SurpriseEgg egg : listOfEgss){
+            System.out.println(egg.getX()+","+egg.getY()+" - "+egg.getValue());
+            if (egg.getValue() > highestValue){
+                highestValue = egg.getValue();
+                highestX = egg.getX();
+                highestY = egg.getY();
+            }
+        }
+        System.out.println("De hoogste waarde is: "+highestValue);
+        System.out.println("Op coördinaat: "+highestX+","+highestY);
+    }
+    
+        public void calculateAverageEggWorth() {
+        int totalEggValue = 0;
+        int totalEggs = 0;
+        double averageEggValue = 0.0;
+        List<SurpriseEgg> listOfEgss= getListOfSurpriseEggsInWorld();
+        for (SurpriseEgg egg : listOfEgss){
+            totalEggValue = totalEggValue + egg.getValue();
+            totalEggs++;
+        }
+        averageEggValue = (double)totalEggValue / totalEggs;
+        System.out.println("Je gemidelde egg value is: "+averageEggValue);
     }
 }
