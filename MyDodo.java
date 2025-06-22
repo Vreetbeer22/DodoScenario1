@@ -1020,4 +1020,42 @@ public class MyDodo extends Dodo
         averageEggValue = (double)totalEggValue / totalEggs;
         System.out.println("Je gemidelde egg value is: "+averageEggValue);
     }
+    
+    /**
+     * kijkt wel nummer er wordt terug gegeven vanuit randomdirection en kiest aan de hand daarvan de richting die mimi op moet kijken
+     */
+    public void faceRandomDirection(){
+        if (randomDirection() == 0){
+            faceNorth();
+        }
+        else if (randomDirection() == 1){
+            faceEast();
+        }
+        else if (randomDirection() == 2){
+            faceSouth();
+        }        
+        else {
+            faceWest();
+        }
+    }
+    
+    /**
+     * mimi zet net zolang stappen in een willekeurige richting totdat de stappen op zijn
+     * voor de richting gebruikt ze de faceRandomDirection functie
+     * daarna kijkt ze of ze kan lopen en als dat kan zet ze een stap
+     */
+    public void moveRandomly() {
+        int myNrOfStepsTaken = 0;
+        while (myNrOfStepsTaken < Mauritius.MAXSTEPS){
+            if(!canMove()){
+                faceRandomDirection();
+            }
+            else{
+                faceRandomDirection();
+                move();
+                myNrOfStepsTaken++;
+            }
+        }
+        faceEast();
+    }
 }
