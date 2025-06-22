@@ -54,6 +54,11 @@ public class MyDodo extends Dodo
         }
     }
     
+    /**
+     * Checks if there is a fence ahead
+     * if there is mimi jumps over the fence
+     * if there is no fence nothing happens
+     */
     public void climbOverFence() {
         if (fenceAhead()){
             turnLeft();
@@ -67,6 +72,11 @@ public class MyDodo extends Dodo
         }
     }
     
+    /**
+     * checks if there is a fence ahead
+     * if there is mimi try's to jump over it but if there are multiple fence's she wil keep on going until there is no fance and she can go back down
+     * if there is no fence nothing happens
+     */
         public void climbOverMultipleFences() {
         boolean voltooid = false;
         if (fenceAhead()){
@@ -175,11 +185,19 @@ public class MyDodo extends Dodo
        }
     }
     
+    /**
+     * turns mimi 180 degrees by turning right 2 times
+     */
     public void turn180(){
         turnRight();
         turnRight();
     }
     
+    /**
+     * checks if there is a grian ahead
+     * does this by moving forwards and then checking if mimi is standing on a grain
+     * then going back to the original space and returning if there is a grain
+     */
     public boolean grainAhead(){
         move();
         boolean isGrain = onGrain();
@@ -187,6 +205,9 @@ public class MyDodo extends Dodo
         return isGrain;
     }
     
+    /**
+     * mimi keeps on walking in a straight line until on a egg
+     */
     public void goToEgg(){
         boolean eggFound = false;
         while (!eggFound) {
@@ -199,6 +220,10 @@ public class MyDodo extends Dodo
         }
     }
     
+    /**
+     * gets mimi back to the start of the row
+     * does this bij turning aroud, walking untill she can't walk any further and then turn back around
+     */
     public void goBackToStartOfRowAndFaceBack() {
          turn180();
          while( ! borderAhead() && canMove()){
@@ -207,6 +232,9 @@ public class MyDodo extends Dodo
         turn180();
     }
     
+    /**
+     * walks mimi to the end of the world and climbs over fences in her way
+     */
     public void walkToWorldEdgeClimbingOverFences() {
         while( ! borderAhead()){
             if (onNest()){
@@ -221,6 +249,10 @@ public class MyDodo extends Dodo
         }
     }
     
+    /**
+     * keeps on walking till the end of the row
+     * every time mimi stands on a grain she picks it up and print the coordinates she standing on
+     */
     public void pickUpGrainsAndPrintCoordinates() {
         for (int i = 0; i < 20; i++) {
             System.out.println();
@@ -238,12 +270,18 @@ public class MyDodo extends Dodo
         }
     }
     
+    /**
+     * steps one cell backwards
+     */
     public void stepOneCellBackwards() {
         turn180();
         move();
         turn180();
     }
     
+    /**
+     * walks to the end the world and every time mimi is on a empty nest she lays an egg
+     */
     public void walkToWorldEdgeFillingEmptyNests() {
         while(! borderAhead()){
             if (onNest() && !onEgg()){
@@ -256,6 +294,10 @@ public class MyDodo extends Dodo
         }
     }
     
+    /**
+     * keeps on walking along a block of fence's until mimi stands on a egg
+     * does this by checking if there is a fence next to her and then move until there isn't
+     */
     public void walkAroundFencedArea() {
         while ( ! onEgg()){
             turnRight();
@@ -275,6 +317,10 @@ public class MyDodo extends Dodo
         }
     }
     
+    /**
+     * keeps folowing a trail of eggs to a nest
+     * checks if there is a egg infront of her and then steps towards the egg and pick it up
+     */
     public void eggTrailToNest() {
         while ( !onNest()){
             if (eggAhead() && ! nestAhead()){
@@ -305,6 +351,11 @@ public class MyDodo extends Dodo
         }
     }
     
+    /**
+     * walks in a simple maze until mimi is on a nest
+     * if there is no fence ahead mimi takes a step
+     * if there is a fence mimi turns to search for a way with no fence ahead and then takes a step
+     */
     public void walkInSimpleMaze() {
         while ( ! onNest()){
             if( ! fenceAhead()){
@@ -323,6 +374,11 @@ public class MyDodo extends Dodo
         }
     }
     
+    /**
+     * checks if there is a fence to the right
+     * does this by turning to the right and checking if there is a fence in front
+     * then turns back and gives back the result
+     */
     public boolean fenceOnRightSide() {
         turnRight();
         boolean result = fenceAhead();
@@ -330,6 +386,9 @@ public class MyDodo extends Dodo
         return result;
     }
     
+    /**
+     * does the same as fenceOnRightSide but for the left
+     */
     public boolean fenceOnLeftSide() {
         turnLeft();
         boolean result = fenceAhead();
@@ -337,6 +396,13 @@ public class MyDodo extends Dodo
         return result;
     }
     
+    /**
+     * walks in a bit more complex maze until on a nest
+     * does this by looking if there is a fence on the right side and if not move to the right
+     * if there is a fence on the right mimi checks in front of her to move
+     * if there is also a fence in front of mimi she checks the left side
+     * and if there is a fence to the left also she turns back and try's a different way
+     */
     public void walkInMaze() {
         while ( ! onNest()){
             boolean fenceOnRight = fenceOnRightSide();
@@ -358,6 +424,9 @@ public class MyDodo extends Dodo
         }
     }
     
+    /**
+     * faces the direction of the number you give
+     */
     public void faceDirection(int direction) {
         if (direction < NORTH || direction > WEST) {
             return;
@@ -366,30 +435,47 @@ public class MyDodo extends Dodo
             turnRight();
         }
     }
+    
+    /**
+     * mimi face's north
+     */
     public void faceNorth() {
         while (getDirection() !=NORTH) {
             turnRight();
         }
     }
     
+    /**
+     * mimi face's east
+     */
     public void faceEast() {
         while (getDirection() !=EAST) {
             turnRight();
         }
     }
     
+    /**
+     * mimi face's south
+     */
     public void faceSouth() {
         while (getDirection() !=SOUTH) {
             turnRight();
         }
     }
     
+    /**
+     * mimi face's west
+     */
     public void faceWest() {
         while (getDirection() !=WEST) {
             turnRight();
         }
     }
     
+    /**
+     * checks if the given coordinates are valid
+     * does this by asking the outer cords of the world and seeing if they are greater or lesser than the world
+     */
     public boolean validCoordinates(int x,int y) {
         if (x > getWorld().getWidth()-1 || y > getWorld().getHeight()-1){
             showError ("Those aren't valid coördinates");
@@ -400,6 +486,10 @@ public class MyDodo extends Dodo
         }
     }
     
+    /**
+     * mimi goes to the given coordinates
+     * first checks the coordinates and then keeps walking in either direction until the coordinates of mimi are even to the given cords
+     */
     public void goToLocation(int coordx,int coordy) {
         if (validCoordinates(coordx, coordy)){
             boolean locationXReached = false;
@@ -435,6 +525,11 @@ public class MyDodo extends Dodo
         }
     }
     
+    /**
+     * walks to the end of the row and then back
+     * every time mimi stands on a egg she counts it
+     * at the end she gives the number of found eggs back
+     */
     public int countEggsInRow(){
         int numberOffEggs = 0;
         while( ! borderAhead()){
@@ -450,6 +545,10 @@ public class MyDodo extends Dodo
         return numberOffEggs;
     }
     
+    /**
+     * user gives a number of eggs for mimi to lay
+     * mimi lays eggs in every space until she reached the wanted amount of eggs or she can't move anymore
+     */
     public void layInputNumberOffEggs(int numberOfEggs) {
         int repeat = 0;
         while (numberOfEggs - 1 != repeat){
@@ -470,6 +569,9 @@ public class MyDodo extends Dodo
             }
     }
     
+    /**
+     * goes to a row below and face the other way from wich mimi was facing first
+     */
     public void goToRowBelowAndTurnAround() {
         if(getDirection() == EAST){
             turnRight();
@@ -483,6 +585,9 @@ public class MyDodo extends Dodo
         }
     }
     
+    /**
+     * walks thruh the whole world counting every eggs she stands on and at the end she returns to her starting position
+     */
     public void countEggsInWorld() {
         int eggsInWorld = 0;
         boolean endReached = false;
@@ -510,6 +615,11 @@ public class MyDodo extends Dodo
         showCompliment("je hebt "+eggsInWorld+" gevonden in de wereld");
     }
     
+    /**
+     * counts the eggs in every row to see wich has the most eggs
+     * after every row mimi looks if that row has more eggs than the previus and if that is true that row becomes the new row with the most eggs
+     * at the end mimi gives back wich row has the most eggs in it
+     */
     public void findRowWithMostEggs() {
         boolean endReached = false;
         boolean end = false;
@@ -551,8 +661,7 @@ public class MyDodo extends Dodo
     }
     
     /**
-     * maakt een monument door aan het begin van elke rij de waarde met 1 te verhogen en dan steeds zoveel blokjes in te vullen voordat de dodo terug 
-     * gaat naar zijn orginele positie
+     * makes an monument by increasing a count at the start of every row by 1 and filling that much spaces with eggs
      */
     public void makeEggMonument(){
         int row = 0;
@@ -593,7 +702,7 @@ public class MyDodo extends Dodo
     }
     
     /**
-     * maakt een stevig monument aan eieren door elke keer na een rij het aantal te verdubbelen
+     * makes a stronger monument by duplicating the count after every row and laying that much eggs
      */
     public void makeEggMonument2(){
         int row = 1;
@@ -634,8 +743,8 @@ public class MyDodo extends Dodo
     }
     
     /**
-     * maakt een een piramide door voor elke rij de waarde met 1 te verhogen en vervolgens
-     * bijde kanten op aan de hand van de hoeveelheid waarde steeds eieren te leggen
+     * makes a pyramid of eggs by increasing the count off eggs with 1 for every row
+     * and then lays eggs in both ways as much as the count is
      */
     public void makeEggPyramid() {
         int row = 0;
@@ -710,7 +819,8 @@ public class MyDodo extends Dodo
     }
     
     /**
-     * telt het gemiddelde aantal eieren per rij door eerst alles te tellen en dat aantal door het aantal rijen te delen
+     * counts the average amount off eggs by first counting the amount off eggs in the world
+     * and then dividing that amount by the amount of rows to find the average amount per row
      */
     public void countAverageAmountOfEggsPerRow() {
         int eggsInWorld = 0;
