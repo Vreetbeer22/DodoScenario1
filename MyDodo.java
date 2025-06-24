@@ -1155,17 +1155,97 @@ public class MyDodo extends Dodo
      * daarna kijkt ze of ze kan lopen en als dat kan zet ze een stap
      */
     public void moveRandomly() {
-        int myNrOfStepsTaken = 0;
-        while (myNrOfStepsTaken < Mauritius.MAXSTEPS){
+        int myNrOfStepsTaken = Mauritius.MAXSTEPS;
+        int score = 0;
+        if (onBlueEgg()){
+            pickUpEgg();
+            score++;
+        }
+        else if (onGoldenEgg()){
+            pickUpEgg();
+            score =+ 5;
+        }
+        while (myNrOfStepsTaken != 0){
+            faceRandomDirection();
             if(!canMove()){
                 faceRandomDirection();
             }
             else{
-                faceRandomDirection();
                 move();
-                myNrOfStepsTaken++;
+                if (onBlueEgg()){
+                    pickUpEgg();
+                    score++;
+                }
+                else if (onGoldenEgg()){
+                    pickUpEgg();
+                    score += 5;
+                }
+                myNrOfStepsTaken--;
+                ((Mauritius)getWorld()).updateScore(myNrOfStepsTaken, score);
             }
         }
         faceEast();
+    }
+    
+    public void dodoRace() {
+        int myNrOfStepsTaken = Mauritius.MAXSTEPS;
+        int score = 0;
+        if (onBlueEgg()){
+            pickUpEgg();
+            score++;
+        }
+        else if (onGoldenEgg()){
+            pickUpEgg();
+            score += 5;
+        }
+        while (myNrOfStepsTaken != 0){ 
+            List<Egg> listOfEgss= getListOfEggsInWorld();
+            double closestDistance = Double.MAX_VALUE;
+            Egg closestEgg = null;
+            for (Egg egg : listOfEgss){
+                int x = egg.getX() - getX();
+                int y = egg.getY() - getY();
+                double distance = Math.sqrt(x * x + y * y);
+                if (onGoldenEgg()){
+                    double distance : 5;
+                    
+                }
+                if (distance < closestDistance){
+                    closestDistance = distance;
+                    closestEgg = egg;
+                } 
+            }
+            
+            if (closestEgg == null){
+                break;
+            }
+            
+            if (getX() < closestEgg.getX()) {
+                faceEast();
+                move();
+            } else if (getX() > closestEgg.getX()) {
+                faceWest();
+                move();
+            } else if (getY() < closestEgg.getY()) {
+                faceSouth();
+                move();
+            } else if (getY() > closestEgg.getY()) {
+                faceNorth();
+                move();
+            }
+            
+            if (onBlueEgg()){
+                pickUpEgg();
+                score++;
+            }
+            else if (onGoldenEgg()){
+                pickUpEgg();
+                score += 5;
+            }
+            
+            myNrOfStepsTaken--;
+            ((Mauritius)getWorld()).updateScore(myNrOfStepsTaken, score);
+            faceEast();
+        }
     }
 }
