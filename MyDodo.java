@@ -1206,9 +1206,8 @@ public class MyDodo extends Dodo
                 int x = egg.getX() - getX();
                 int y = egg.getY() - getY();
                 double distance = Math.sqrt(x * x + y * y);
-                if (onGoldenEgg()){
-                    double distance : 5;
-                    
+                if (egg instanceof GoldenEgg){
+                    distance = distance / 5;
                 }
                 if (distance < closestDistance){
                     closestDistance = distance;
