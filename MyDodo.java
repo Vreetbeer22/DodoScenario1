@@ -1187,8 +1187,7 @@ public class MyDodo extends Dodo
         faceEast();
     }
     
-    public void dodoRace() {
-        int myNrOfStepsTaken = Mauritius.MAXSTEPS;
+    public int pickUpAllSortsOffEggs() {
         int score = 0;
         if (onBlueEgg()){
             pickUpEgg();
@@ -1198,22 +1197,37 @@ public class MyDodo extends Dodo
             pickUpEgg();
             score += 5;
         }
+        return score;
+    }
+    
+    public Egg getClosesteEgg() {
+        List<Egg> listOfEgss= getListOfEggsInWorld();
+        double closestDistance = Double.MAX_VALUE;
+        Egg closestEgg = null;
+        for (Egg egg : listOfEgss){
+            int x = egg.getX() - getX();
+            int y = egg.getY() - getY();
+            double distance = Math.sqrt(x * x + y * y);
+            if (egg instanceof GoldenEgg){
+                distance = distance / 5;
+            }
+            if (distance < closestDistance){
+                closestDistance = distance;
+                closestEgg = egg;
+            } 
+        }
+        return closestEgg;
+    }
+    
+    public void dodoRace() {
+        int myNrOfStepsTaken = Mauritius.MAXSTEPS;
+        int score = 0;
+        score = score + pickUpAllSortsOffEggs();
         while (myNrOfStepsTaken != 0){ 
             List<Egg> listOfEgss= getListOfEggsInWorld();
             double closestDistance = Double.MAX_VALUE;
             Egg closestEgg = null;
-            for (Egg egg : listOfEgss){
-                int x = egg.getX() - getX();
-                int y = egg.getY() - getY();
-                double distance = Math.sqrt(x * x + y * y);
-                if (egg instanceof GoldenEgg){
-                    distance = distance / 5;
-                }
-                if (distance < closestDistance){
-                    closestDistance = distance;
-                    closestEgg = egg;
-                } 
-            }
+            closestEgg = getClosesteEgg();
             
             if (closestEgg == null){
                 break;
@@ -1233,18 +1247,11 @@ public class MyDodo extends Dodo
                 move();
             }
             
-            if (onBlueEgg()){
-                pickUpEgg();
-                score++;
-            }
-            else if (onGoldenEgg()){
-                pickUpEgg();
-                score += 5;
-            }
+            score = score + pickUpAllSortsOffEggs();
             
             myNrOfStepsTaken--;
             ((Mauritius)getWorld()).updateScore(myNrOfStepsTaken, score);
-            faceEast();
         }
+        faceEast();
     }
 }
