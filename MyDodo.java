@@ -11,6 +11,7 @@ import java.util.ArrayList;
 public class MyDodo extends Dodo
 {
     private int myNrOfEggsHatched;
+    int myNrOfStepsTaken = Mauritius.MAXSTEPS;
     
     public MyDodo() {
         super( EAST );
@@ -30,6 +31,7 @@ public class MyDodo extends Dodo
     public void move() {
         if ( canMove() ) {
             step();
+            myNrOfStepsTaken--;
         } else {
             showError( "I'm stuck!" );
         }
@@ -494,7 +496,7 @@ public class MyDodo extends Dodo
         if (validCoordinates(coordx, coordy)){
             boolean locationXReached = false;
             boolean locationYReached = false;
-            while ( !locationXReached ){
+            while ( !locationXReached && myNrOfStepsTaken > 0){
                 if (getX() < coordx){
                     faceEast();
                     move();
@@ -508,7 +510,7 @@ public class MyDodo extends Dodo
                 }
             }
             turnRight();
-            while ( !locationYReached ){
+            while ( !locationYReached && myNrOfStepsTaken > 0){
                 if (getY() < coordy){
                     faceSouth();
                     move();
@@ -1187,19 +1189,26 @@ public class MyDodo extends Dodo
         faceEast();
     }
     
+    /**
+     * kijkt of mimi op een ei staat en als dat zo is dan pakt ze dat ei op
+     * ze checkt dan de waarde van het opgepakte ei en voegt dat toe aan de score
+     */
     public int pickUpAllSortsOffEggs() {
         int score = 0;
-        if (onBlueEgg()){
-            pickUpEgg();
-            score++;
-        }
-        else if (onGoldenEgg()){
-            pickUpEgg();
-            score += 5;
+        if (onEgg()){
+            Egg e = pickUpEgg();
+            if (e != null) {
+                score += e.getValue();
+            }
         }
         return score;
     }
     
+    /**
+     * maakt een lijst van alle eieren in de wereld
+     * gaat daarna kijken welk ei het dichste bij ligt door de afstand tussen de dodo en elk ei te berekenen
+     * geeft daarna het dichtsbijzijnde ei terug
+     */
     public Egg getClosesteEgg() {
         List<Egg> listOfEgss= getListOfEggsInWorld();
         double closestDistance = Double.MAX_VALUE;
@@ -1219,11 +1228,14 @@ public class MyDodo extends Dodo
         return closestEgg;
     }
     
+    /**
+     * gaat door de hele wereld de eieren scannen en daarna steeds het dichtsbijzijnde ei op te pakken
+     * gebruikt hiervoor functies als pickUpAllSortsOffEggs, getClosesteEgg en goToLocation
+     * telt op het scorebord ook alle stappen en de score mee
+     */
     public void dodoRace() {
-        int myNrOfStepsTaken = Mauritius.MAXSTEPS;
         int score = 0;
-        score = score + pickUpAllSortsOffEggs();
-        while (myNrOfStepsTaken != 0){ 
+        while (myNrOfStepsTaken > 0){ 
             List<Egg> listOfEgss= getListOfEggsInWorld();
             double closestDistance = Double.MAX_VALUE;
             Egg closestEgg = null;
@@ -1233,23 +1245,10 @@ public class MyDodo extends Dodo
                 break;
             }
             
-            if (getX() < closestEgg.getX()) {
-                faceEast();
-                move();
-            } else if (getX() > closestEgg.getX()) {
-                faceWest();
-                move();
-            } else if (getY() < closestEgg.getY()) {
-                faceSouth();
-                move();
-            } else if (getY() > closestEgg.getY()) {
-                faceNorth();
-                move();
-            }
+            goToLocation(closestEgg.getX(), closestEgg.getY());
             
             score = score + pickUpAllSortsOffEggs();
             
-            myNrOfStepsTaken--;
             ((Mauritius)getWorld()).updateScore(myNrOfStepsTaken, score);
         }
         faceEast();
